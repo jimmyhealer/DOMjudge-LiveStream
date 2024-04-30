@@ -1,0 +1,1 @@
+export { ContestApi } from './domjudge'

@@ -6,13 +6,26 @@ import VueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    VueDevTools(),
-  ],
+  plugins: [vue(), VueDevTools()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
+    }
+  },
+  server: {
+    proxy: {
+      '/domjudge': {
+        target: 'http://35.236.140.217:12345',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/domjudge/, ''),
+        configure: (proxy, options) => {
+          proxy.on('proxyRes', (proxyRes, req, res) => {
+            if (proxyRes.headers['www-authenticate']) {
+              delete proxyRes.headers['www-authenticate']
+            }
+          })
+        }
+      }
     }
   }
 })
