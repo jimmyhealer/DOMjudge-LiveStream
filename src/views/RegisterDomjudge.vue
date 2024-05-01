@@ -16,9 +16,9 @@ const contestApi = new ContestApi()
 const useContest = useContestStore()
 const setpActive = ref(0)
 const domjudgeForm = reactive({
-  url: 'http://localhost:5173/domjudge',
-  username: 'api',
-  password: '1234567890'
+  url: '',
+  username: '',
+  password: ''
 })
 const tableData = ref<any[]>([])
 const selectContests = ref([])
@@ -40,20 +40,23 @@ const isLoading = ref(false)
 async function nextHandler() {
   let completeFlag = false
   isLoading.value = true
-  if (setpActive.value === 0) {
-    completeFlag = await handleDomjudgeForm()
-  } else if (setpActive.value === 1) {
-    // TODO: handle select contest
-    completeFlag = await handleSelectContest()
-  } else if (setpActive.value === 2) {
-    // TODO: handle Upload image
-    completeFlag = await handleUploadImage()
+  try {
+    if (setpActive.value === 0) {
+      completeFlag = await handleDomjudgeForm()
+    } else if (setpActive.value === 1) {
+      // TODO: handle select contest
+      completeFlag = await handleSelectContest()
+    } else if (setpActive.value === 2) {
+      // TODO: handle Upload image
+      completeFlag = await handleUploadImage()
+    }
+  } finally {
+    isLoading.value = false
   }
 
   if (completeFlag) {
     setpActive.value = Math.min(3, setpActive.value + 1)
   }
-  isLoading.value = false
 }
 
 const domjudgeFormRef = ref()
