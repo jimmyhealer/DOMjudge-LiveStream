@@ -7,9 +7,7 @@ defineProps<{
   tableData: any[]
 }>()
 
-const selectContest = defineModel<string>('selectContest', { required: true })
-// TODO: Define selectContests
-const selectContests = ref<any[]>([])
+const selectContests = defineModel<any[]>('selectContests', { required: true })
 // TODO: rename
 const value1 = ref(2)
 
@@ -17,7 +15,7 @@ const multipleTableRef = ref()
 
 function handleCurrentChange(val: any) {
   if (!val) return
-  selectContest.value = val.id
+  selectContests.value = [val.id]
 }
 
 function handleSelectionChange(val: any) {

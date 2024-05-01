@@ -1,23 +1,36 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, type UploadFile } from 'element-plus'
 
 import { ContestApi } from '@/api'
 import { dateToFormat } from '@/utils'
+import { useContestStore } from '@/stores/contest'
 import DomjudgeForm from '@/components/DomjudgeForm.vue'
 import SelectContest from '@/components/SelectContest.vue'
 import UploadImage from '@/components/UploadImage.vue'
 import SuccessInfo from '@/components/SuccessInfo.vue'
 
+import logo from '@/assets/domjudge.png'
+
+const contestApi = new ContestApi()
+const useContest = useContestStore()
+const setpActive = ref(0)
 const domjudgeForm = reactive({
   url: 'http://localhost:5173/domjudge',
   username: 'api',
   password: '1234567890'
 })
-const setpActive = ref(1)
-const contestApi = new ContestApi()
 const tableData = ref<any[]>([])
-const selectContest = ref('')
+const selectContests = ref([])
+
+const fileList = ref<UploadFile[]>([
+  {
+    name: 'image1',
+    url: logo,
+    status: 'success',
+    uid: 1
+  }
+])
 
 function backHandler() {
   setpActive.value = Math.max(0, setpActive.value - 1)
@@ -31,10 +44,10 @@ async function nextHandler() {
     completeFlag = await handleDomjudgeForm()
   } else if (setpActive.value === 1) {
     // TODO: handle select contest
-    completeFlag = true
+    completeFlag = await handleSelectContest()
   } else if (setpActive.value === 2) {
     // TODO: handle Upload image
-    completeFlag = true
+    completeFlag = await handleUploadImage()
   }
 
   if (completeFlag) {
@@ -43,11 +56,11 @@ async function nextHandler() {
   isLoading.value = false
 }
 
-const formRef = ref()
+const domjudgeFormRef = ref()
 // TODO: if domjudge change, need to re-register and clear the tableData
 // Maybe not need
 async function handleDomjudgeForm() {
-  if (!formRef.value || !(await formRef.value.validate())) {
+  if (!domjudgeFormRef.value || !(await domjudgeFormRef.value.validate())) {
     return false
   }
 
@@ -71,6 +84,27 @@ async function handleDomjudgeForm() {
 
   return true
 }
+
+async function handleSelectContest() {
+  if (selectContests.value.length === 0) {
+    ElMessage.error('Please select at least one contest')
+    return false
+  }
+
+  return true
+}
+
+async function handleUploadImage() {
+  return true
+}
+
+async function handleFinish() {
+  useContest.setDomjudgeContests({
+    domjudge: domjudgeForm,
+    contests: selectContests.value,
+    images: fileList.value
+  })
+}
 </script>
 
 <template>
@@ -86,14 +120,22 @@ async function handleDomjudgeForm() {
         <el-step title="Select Contest" />
         <el-step title="Upload Image" />
       </el-steps>
-      <DomjudgeForm ref="formRef" :domjudge-form="domjudgeForm" v-show="setpActive === 0" />
+      <DomjudgeForm
+        ref="domjudgeFormRef"
+        v-model:domjudge-form="domjudgeForm"
+        v-show="setpActive === 0"
+      />
       <SelectContest
         :tableData="tableData"
-        :selectContest="selectContest"
+        v-model:selectContests="selectContests"
         v-show="setpActive === 1"
       />
-      <UploadImage v-show="setpActive === 2" />
-      <SuccessInfo v-show="setpActive === 3" />
+      <div v-show="setpActive === 2">
+        <UploadImage v-model:file-list="fileList" :contestCount="selectContests.length" />
+      </div>
+      <div v-show="setpActive === 3">
+        <SuccessInfo @handler-finish="handleFinish" />
+      </div>
       <el-container style="justify-content: end; margin-top: 20px" v-if="setpActive !== 3">
         <el-button text @click="backHandler">
           {{ setpActive === 0 ? 'Cancel' : 'Back' }}
