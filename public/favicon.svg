@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_圖層_1" data-name="圖層 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 44.02px;
+        letter-spacing: -.02em;
+      }
+
+      .cls-1, .cls-2 {
+        fill: #040c15;
+        font-family: Helvetica-Bold, Helvetica;
+        font-weight: 700;
+      }
+
+      .cls-2 {
+        font-size: 53.92px;
+      }
+    </style>
+  </defs>
+  <text class="cls-2" transform="translate(3.85 46.32) scale(.83 1)"><tspan x="0" y="0">D</tspan></text>
+  <text class="cls-1" transform="translate(34.79 54.15) rotate(12.1)"><tspan x="0" y="0">L</tspan></text>
+</svg>
