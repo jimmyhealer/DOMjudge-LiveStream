@@ -8,6 +8,11 @@ const router = createRouter({
       path: '/',
       name: 'RegisterDomjudge',
       component: RegisterDomjudge
+    },
+    {
+      path: '/help',
+      name: 'Help',
+      component: () => import('@/views/HelpDocumentation.vue')
     }
   ]
 })
