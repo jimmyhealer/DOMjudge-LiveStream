@@ -3,6 +3,7 @@ import type { Scoreboard } from '@/types'
 
 import TeamInfo from '@/components/TeamInfo.vue'
 import ProblemResult from '@/components/ProblemResult.vue'
+import AutoScroll from '@/components/AutoScroll.vue'
 defineProps<{
   scoreboardData: Scoreboard
 }>()
@@ -27,22 +28,24 @@ defineProps<{
       </div>
     </el-col>
   </el-row>
-  <el-row>
-    <el-col :span="6">
-      <TransitionGroup name="list" tag="div">
-        <TeamInfo v-for="team in scoreboardData.teams" :key="team.name" :teamInfo="team" />
-      </TransitionGroup>
-    </el-col>
-    <el-col :span="18">
-      <TransitionGroup name="list" tag="div">
-        <ProblemResult
-          v-for="team in scoreboardData.teams"
-          :key="team.name"
-          :submissions="team.submissions"
-        />
-      </TransitionGroup>
-    </el-col>
-  </el-row>
+  <AutoScroll class="scoreboard-main">
+    <el-row>
+      <el-col :span="6">
+        <TransitionGroup name="list" tag="div">
+          <TeamInfo v-for="team in scoreboardData.teams" :key="team.name" :teamInfo="team" />
+        </TransitionGroup>
+      </el-col>
+      <el-col :span="18">
+        <TransitionGroup name="list" tag="div">
+          <ProblemResult
+            v-for="team in scoreboardData.teams"
+            :key="team.name"
+            :submissions="team.submissions"
+          />
+        </TransitionGroup>
+      </el-col>
+    </el-row>
+  </AutoScroll>
 </template>
 
 <style scoped lang="scss">
@@ -80,5 +83,9 @@ $title-height: 30px;
 
 .border-bottom {
   border-bottom: 2px solid #000;
+}
+
+.scoreboard-main {
+  height: 100%;
 }
 </style>
