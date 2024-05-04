@@ -13,6 +13,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@vercel/node": "^3.0.28",
     "element-plus": "^2.7.1",
     "lodash": "^4.17.21",
     "pinia": "^2.1.7",

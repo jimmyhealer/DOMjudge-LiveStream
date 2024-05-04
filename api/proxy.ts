@@ -1,16 +1,14 @@
-export const config = {
-  runtime: 'edge'
-}
+import type { VercelRequest, VercelResponse } from '@vercel/node'
 
-export default async function proxy(request) {
+export default async function proxy(request: VercelRequest, response: VercelResponse) {
   if (request.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 })
+    response.status(405).send('Method not allowed')
   }
 
-  const data = await request.json()
+  const data = request.body
   const targetUrl = data.url
 
-  const authHeader = request.headers.get('authorization')
+  const authHeader = request.headers.authorization
   const headers = new Headers()
   if (authHeader) {
     headers.set('Authorization', authHeader)
@@ -21,8 +19,5 @@ export default async function proxy(request) {
     headers: headers
   })
 
-  const response = new Response(apiResponse.body, apiResponse)
-  response.headers.delete('www-authenticate')
-
-  return response
+  response.status(apiResponse.status).send(await apiResponse.text())
 }
