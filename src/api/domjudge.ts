@@ -37,11 +37,19 @@ export class ContestApi extends DomjudgeApi {
   }
 
   public async getScoreboard(id: string): Promise<any> {
-    return await this.domjudge?.fetchApi(`contests/${id}/scoreboard`)
+    return await this.domjudge?.fetchApi(`contests/${id}/scoreboard?public=true`)
   }
 
   public async getSubmissions(contestId: string): Promise<any> {
     return await this.domjudge?.fetchApi(`contests/${contestId}/submissions`)
+  }
+
+  public async getJudgements(contestId: string): Promise<any> {
+    return await this.domjudge?.fetchApi(`contests/${contestId}/judgements`)
+  }
+
+  public async getTeamInfos(contestId: string): Promise<any> {
+    return await this.domjudge?.fetchApi(`contests/${contestId}/teams?public=true`)
   }
 
   public async getEvents(contestId: string): Promise<any> {
