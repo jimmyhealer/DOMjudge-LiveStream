@@ -13,6 +13,11 @@ const router = createRouter({
       path: '/help',
       name: 'Help',
       component: () => import('@/views/HelpDocumentation.vue')
+    },
+    {
+      path: '/live',
+      name: 'LiveStream',
+      component: () => import('@/views/LiveStream.vue')
     }
   ]
 })
