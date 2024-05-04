@@ -11,11 +11,14 @@ export default async function proxy(request) {
   const targetUrl = data.url
 
   const authHeader = request.headers.get('authorization')
+  const headers = new Headers()
+  if (authHeader) {
+    headers.set('Authorization', authHeader)
+  }
+
   const apiResponse = await fetch(targetUrl, {
     method: 'GET',
-    headers: {
-      Authorization: authHeader
-    }
+    headers: headers
   })
 
   const response = new Response(apiResponse.body, apiResponse)
