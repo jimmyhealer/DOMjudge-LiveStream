@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { ElMessage, type UploadFile } from 'element-plus'
 
 import { ContestApi } from '@/api'
@@ -101,12 +102,15 @@ async function handleUploadImage() {
   return true
 }
 
+const router = useRouter()
 async function handleFinish() {
   useContest.setDomjudgeContests({
     domjudge: domjudgeForm,
     contests: selectContests.value,
     images: fileList.value
   })
+
+  await router.push('/live')
 }
 </script>
 
