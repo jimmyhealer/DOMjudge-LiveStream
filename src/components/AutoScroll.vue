@@ -62,6 +62,8 @@ function smoothScrollToBottom(duration: number) {
 
 let timeout: number
 const startAutoScroll = async () => {
+  console.log('start auto scroll')
+  if (!autoScrollRef.value) throw new Error('autoScrollRef is not defined')
   await smoothScrollToBottom(10000)
 
   timeout = setTimeout(async () => {
@@ -71,7 +73,8 @@ const startAutoScroll = async () => {
 }
 
 onMounted(() => {
-  setTimeout(startAutoScroll, 100)
+  console.log('mounted')
+  setTimeout(startAutoScroll, 1000)
 })
 
 onUnmounted(() => {

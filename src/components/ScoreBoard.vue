@@ -86,6 +86,6 @@ $title-height: 30px;
 }
 
 .scoreboard-main {
-  height: 100%;
+  height: calc(100% - 30px);
 }
 </style>
