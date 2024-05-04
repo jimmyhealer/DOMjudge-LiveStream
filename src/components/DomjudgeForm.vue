@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { FormInstance } from 'element-plus'
+import { ContestApi } from '@/api'
 
 const domjudgeForm = defineModel<{
   url: string
   username: string
   password: string
 }>('domjudgeForm', { required: true })
+const contestApi = new ContestApi()
 
 const rules = {
   url: [
@@ -19,10 +21,8 @@ const rules = {
     {
       validator: async (_: any, value: any, callback: any) => {
         try {
-          const response = await fetch(value)
-          if (!response.ok) {
-            callback(new Error('Invalid Url'))
-          }
+          contestApi.register(value)
+          await contestApi.getContests()
         } catch (error) {
           callback(new Error('Invalid Url'))
         }
