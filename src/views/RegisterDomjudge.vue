@@ -123,11 +123,7 @@ async function handleFinish() {
         <el-step title="Select Contest" />
         <el-step title="Upload Image" />
       </el-steps>
-      <DomjudgeForm
-        ref="domjudgeFormRef"
-        v-model:domjudge-form="domjudgeForm"
-        v-show="setpActive === 0"
-      />
+      <DomjudgeForm ref="domjudgeFormRef" :domjudge-form="domjudgeForm" v-show="setpActive === 0" />
       <SelectContest
         :tableData="tableData"
         v-model:selectContests="selectContests"
