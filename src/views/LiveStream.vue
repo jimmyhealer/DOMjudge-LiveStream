@@ -113,12 +113,12 @@ async function updateScoreboard(contestId: string) {
     }
   })
 
-  if (new Date(scoreboardData.value.get(contestId)!.contest.endTime) <= new Date()) {
-    scoreboardDataTimeout.set(
-      contestId,
-      setTimeout(() => updateScoreboard(contestId), 1000)
-    )
-  }
+  // if (new Date(scoreboardData.value.get(contestId)!.contest.endTime) <= new Date()) {
+  // }
+  scoreboardDataTimeout.set(
+    contestId,
+    setTimeout(() => updateScoreboard(contestId), 1000)
+  )
 }
 
 async function initScoreboard(contestId: string) {
@@ -177,12 +177,12 @@ async function getLastSubmission(contestId: string) {
       .slice(Math.max(0, len - lastSubmissionLimit), len)
   )
 
-  if (new Date(scoreboardData.value.get(contestId)!.contest.endTime) <= new Date()) {
-    lastSubmissionTimeout.set(
-      contestId,
-      setTimeout(() => getLastSubmission(contestId), 1000)
-    )
-  }
+  // if (new Date(scoreboardData.value.get(contestId)!.contest.endTime) <= new Date()) {
+  // }
+  lastSubmissionTimeout.set(
+    contestId,
+    setTimeout(() => getLastSubmission(contestId), 1000)
+  )
 }
 
 function checkIsCountDown() {
