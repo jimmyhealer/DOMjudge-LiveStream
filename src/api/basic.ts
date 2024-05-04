@@ -3,7 +3,7 @@ import { ElMessage } from 'element-plus'
 import { convertObjectKeyToCamel } from './utils'
 
 class FetchTemplate {
-  private url: string
+  protected url: string
 
   constructor(url: string) {
     this.url = url
@@ -41,13 +41,13 @@ class FetchTemplate {
     return convertObjectKeyToCamel(responseData)
   }
 
-  public async fetchApi(path: string, options: RequestInit = {}): Promise<any> {
-    const processedOptions = this.preprocessOptions(options)
-    const response = await fetch(`${this.url}/api/v4/${path}`, {
-      ...processedOptions
-    })
-    return this.postprocessResponse(response)
-  }
+  // public async fetchApi(path: string, options: RequestInit = {}): Promise<any> {
+  //   const processedOptions = this.preprocessOptions(options)
+  //   const response = await fetch(`${this.url}/api/v4/${path}`, {
+  //     ...processedOptions
+  //   })
+  //   return this.postprocessResponse(response)
+  // }
 
   public setUrl(url: string): void {
     this.url = url
@@ -81,5 +81,18 @@ export class DomjudgeFetch extends FetchTemplate {
         ...options.headers
       }
     }
+  }
+
+  public async fetchApi(path: string, options: RequestInit = {}): Promise<any> {
+    const processedOptions = this.preprocessOptions(options)
+    const response = await fetch(`/api/proxy`, {
+      ...processedOptions,
+      body: JSON.stringify({
+        url: `${this.url}/api/v4/${path}`
+      }),
+      method: 'POST'
+    })
+
+    return this.postprocessResponse(response)
   }
 }
