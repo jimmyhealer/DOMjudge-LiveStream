@@ -14,9 +14,19 @@ defineProps<{
           <p>{{ teamInfo.rank }}</p>
         </el-col>
         <el-col :span="22" class="border-right">
-          <el-text truncated style="justify-content: start; padding-left: 4px">
+          <p
+            truncated
+            style="
+              justify-content: start;
+              padding-left: 4px;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              overflow: hidden;
+              font-size: 18px;
+            "
+          >
             {{ teamInfo.name }}
-          </el-text>
+          </p>
         </el-col>
       </el-row>
     </el-col>
