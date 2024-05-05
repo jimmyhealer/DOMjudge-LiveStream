@@ -142,7 +142,7 @@ async function getLastSubmission(contestId: string) {
   const lastSubmission = await contestApi.getSubmissions(contestId)
   const judgement = await contestApi.getJudgements(contestId)
 
-  const len = lastSubmission.length
+  let len = 0
   lastSubmissionData.value?.set(
     contestId,
     lastSubmission
@@ -154,6 +154,8 @@ async function getLastSubmission(contestId: string) {
         return team !== undefined
       })
       .map((submission: any): Submission => {
+        len++
+
         // TODO: optimize this
         if (!scoreboardData.value) throw new Error('scoreboardData is not initialized')
 
