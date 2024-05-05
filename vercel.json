@@ -3,6 +3,10 @@
     {
       "source": "/(.*)",
       "destination": "/"
+    },
+    {
+      "source": "/domjudge/(.*)",
+      "destination": "https://domjudge.aclab.cool/$1"
     }
   ]
 }
