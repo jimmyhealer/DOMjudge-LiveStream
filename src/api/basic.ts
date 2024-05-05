@@ -41,13 +41,13 @@ class FetchTemplate {
     return convertObjectKeyToCamel(responseData)
   }
 
-  // public async fetchApi(path: string, options: RequestInit = {}): Promise<any> {
-  //   const processedOptions = this.preprocessOptions(options)
-  //   const response = await fetch(`${this.url}/api/v4/${path}`, {
-  //     ...processedOptions
-  //   })
-  //   return this.postprocessResponse(response)
-  // }
+  public async fetchApi(path: string, options: RequestInit = {}): Promise<any> {
+    const processedOptions = this.preprocessOptions(options)
+    const response = await fetch(`${this.url}/api/v4/${path}`, {
+      ...processedOptions
+    })
+    return this.postprocessResponse(response)
+  }
 
   public setUrl(url: string): void {
     this.url = url
@@ -83,16 +83,16 @@ export class DomjudgeFetch extends FetchTemplate {
     }
   }
 
-  public async fetchApi(path: string, options: RequestInit = {}): Promise<any> {
-    const processedOptions = this.preprocessOptions(options)
-    const response = await fetch(`/api/proxy`, {
-      ...processedOptions,
-      body: JSON.stringify({
-        url: `${this.url}/api/v4/${path}`
-      }),
-      method: 'POST'
-    })
+  // public async fetchApi(path: string, options: RequestInit = {}): Promise<any> {
+  //   const processedOptions = this.preprocessOptions(options)
+  //   const response = await fetch(`/api/proxy`, {
+  //     ...processedOptions,
+  //     body: JSON.stringify({
+  //       url: `${this.url}/api/v4/${path}`
+  //     }),
+  //     method: 'POST'
+  //   })
 
-    return this.postprocessResponse(response)
-  }
+  //   return this.postprocessResponse(response)
+  // }
 }

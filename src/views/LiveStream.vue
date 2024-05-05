@@ -154,6 +154,8 @@ async function getLastSubmission(contestId: string) {
           .get(contestId)!
           .teams.find((teamInfo: any) => teamInfo.id === submission.teamId)!
 
+        if (!team) return {} as Submission
+
         const problem = scoreboardData.value
           .get(contestId)!
           .problems.find((problem: any) => problem.id === submission.problemId)!
