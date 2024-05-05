@@ -22,10 +22,10 @@ const scoreboardData = ref<Map<string, Scoreboard>>(new Map())
 const scoreboardDataTimeout: Map<string, number> = new Map()
 const lastSubmissionTimeout: Map<string, number> = new Map()
 
-function addTimeStringToDate(targetDate: Date, timeString: string): Date {
+function processTimeStringToDate(targetDate: Date, timeString: string): Date {
   const [hours, minutes, seconds] = timeString.split(':').map(Number)
-  const millisecondsToAdd = hours * 3600 * 1000 + minutes * 60 * 1000 + seconds * 1000
-  targetDate.setTime(targetDate.getTime() + millisecondsToAdd)
+  const milliseconds = hours * 3600 * 1000 + minutes * 60 * 1000 + seconds * 1000
+  targetDate.setTime(targetDate.getTime() - milliseconds)
   return targetDate
 }
 
@@ -39,7 +39,7 @@ async function getContestName(contestId: string): Promise<ScoreboardContest> {
       ? new Date(state.frozen)
       : frozenDuration === null
         ? new Date(contest.endTime)
-        : addTimeStringToDate(new Date(contest.startTime), frozenDuration)
+        : processTimeStringToDate(new Date(contest.endTime), frozenDuration)
 
   if (new Date(contest.startTime) > new Date()) {
     setTimeout(() => getContestName(contestId), 60000)
