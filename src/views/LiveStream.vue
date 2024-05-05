@@ -146,6 +146,13 @@ async function getLastSubmission(contestId: string) {
   lastSubmissionData.value?.set(
     contestId,
     lastSubmission
+      .filter((submission: any) => {
+        const team = scoreboardData.value
+          .get(contestId)!
+          .teams.find((teamInfo: any) => teamInfo.id === submission.teamId)!
+
+        return team !== undefined
+      })
       .map((submission: any): Submission => {
         // TODO: optimize this
         if (!scoreboardData.value) throw new Error('scoreboardData is not initialized')
