@@ -13,7 +13,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=rootpw
       - MYSQL_USER=domjudge
-      - MYSQL_PASSWORD=djpw
+      - MYSQL_PASSWORD=[YOUR_MYSQL_PASSWORD]
       - MYSQL_DATABASE=domjudge
     command: --max-connections=1000
 
@@ -33,7 +33,7 @@ services:
       - MYSQL_HOST=mariadb
       - MYSQL_ROOT_PASSWORD=rootpw
       - MYSQL_USER=domjudge
-      - MYSQL_PASSWORD=djpw
+      - MYSQL_PASSWORD=[YOUR_MYSQL_PASSWORD]
       - MYSQL_DATABASE=domjudge
 
   judgehost:
