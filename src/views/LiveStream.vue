@@ -153,6 +153,14 @@ async function getLastSubmission(contestId: string) {
 
         return team !== undefined
       })
+      .filter((submission: any) => {
+        const contest = scoreboardData.value.get(contestId)!.contest
+
+        return (
+          new Date(submission.time) >= contest.startTime &&
+          new Date(submission.time) <= contest.endTime
+        )
+      })
       .map((submission: any): Submission => {
         len++
 
