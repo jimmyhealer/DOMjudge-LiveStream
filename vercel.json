@@ -1,12 +1,12 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "/"
-    },
-    {
       "source": "/domjudge/(.*)",
       "destination": "https://domjudge.aclab.cool/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/"
     }
   ]
 }
