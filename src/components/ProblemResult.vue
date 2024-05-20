@@ -66,11 +66,11 @@ function formatSubmissionJudged(sR: Submission) {
 }
 
 p {
-  height: 28px;
   margin: auto;
-  line-height: 28px;
+  line-height: 30px;
+  font-size: 20px;
   font-weight: 600;
   text-align: center;
-  // color: white;
+  font-family: 'Courier New', Courier, monospace;
 }
 </style>
