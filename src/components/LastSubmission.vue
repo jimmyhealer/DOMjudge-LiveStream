@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { Submission } from '@/types'
+import type { LastSubmission } from '@/types'
 
 import SubmissionItem from '@/components/SubmissionItem.vue'
 
 defineProps<{
-  submissions: Submission[] | undefined
+  submissions: LastSubmission[] | undefined
 }>()
 </script>
 

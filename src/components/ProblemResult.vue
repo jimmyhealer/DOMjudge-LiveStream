@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import type { SubmissionResult } from '@/types'
+import type { Submission } from '@/types'
 
 defineProps<{
-  submissions: SubmissionResult[]
+  submissions: Submission[]
 }>()
 
 const ColorStatus = {
-  FirstBlood: '#1daa1d',
+  FirstToSolve: '#1daa1d',
   Accepted: '#60e760',
   WrongAnswer: '#e87272',
   Pending: '#6666ff',
   NotAttempted: 'white'
 }
 
-function blockColor(sR: SubmissionResult) {
+function blockColor(sR: Submission) {
   if (sR.firstToSolve) {
-    return ColorStatus.FirstBlood
-  } else if (sR.penalty !== undefined) {
+    return ColorStatus.FirstToSolve
+  } else if (sR.solved) {
     return ColorStatus.Accepted
   } else if (sR.numPending > 0) {
     return ColorStatus.Pending
@@ -27,24 +27,31 @@ function blockColor(sR: SubmissionResult) {
   return ColorStatus.NotAttempted
 }
 
-function pluralizeTry(n: number) {
-  return n === 1 ? 'try' : 'tries'
+function formatSubmissionNumber(sR: Submission): string {
+  if (!sR.solved) {
+    return (sR.numJudged + sR.numPending).toString()
+  } else if (sR.numJudged + sR.numPending - 1 === 0) {
+    return ''
+  } else {
+    return (sR.numJudged + sR.numPending - 1).toString()
+  }
+}
+
+function formatSubmissionJudged(sR: Submission) {
+  return (sR.solved ? '+' : '-') + formatSubmissionNumber(sR)
 }
 </script>
 
 <template>
-  <div class="problem-col" style="border-bottom: 1px solid #000; height: 53px">
+  <div class="problem-col" style="border-bottom: 1px solid #000; height: 32px">
     <div
-      v-for="problem in submissions"
-      :key="problem.id"
+      v-for="probelmStatus in submissions"
+      :key="probelmStatus.id"
       class="problem-result"
-      :style="{ 'background-color': blockColor(problem) }"
+      :style="{ 'background-color': blockColor(probelmStatus) }"
     >
-      <p style="font-size: 20px; font-weight: 600">{{ problem.penalty ?? '' }}</p>
-      <p v-show="problem.numJudged > 0 || problem.numPending > 0">
-        {{ problem.numJudged }}
-        {{ problem.numPending > 0 ? '+ ' + problem.numPending : '' }}
-        {{ pluralizeTry(problem.numJudged + problem.numPending) }}
+      <p v-if="probelmStatus.numJudged + probelmStatus.numPending">
+        {{ formatSubmissionJudged(probelmStatus) }}
       </p>
     </div>
   </div>
@@ -54,11 +61,16 @@ function pluralizeTry(n: number) {
 .problem-result {
   width: 100%;
   margin: 2px;
+  display: flex;
+  border-radius: 3px;
 }
 
 p {
-  height: 24px;
-  line-height: 24px;
+  height: 28px;
+  margin: auto;
+  line-height: 28px;
+  font-weight: 600;
   text-align: center;
+  // color: white;
 }
 </style>

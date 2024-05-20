@@ -1,28 +1,31 @@
 <script setup lang="ts">
 import type { Scoreboard } from '@/types'
 
+import { useLiveStreamStore } from '@/stores/livestream'
 import TeamInfo from '@/components/TeamInfo.vue'
 import ProblemResult from '@/components/ProblemResult.vue'
 import AutoScroll from '@/components/AutoScroll.vue'
-defineProps<{
-  scoreboardData: Scoreboard
+const props = defineProps<{
+  contestId: string
 }>()
+
+const scoreboardData = useLiveStreamStore().getScoreboard(props.contestId) as Scoreboard
 </script>
 
 <template>
   <el-row>
-    <el-col :span="6">
+    <el-col :span="8">
       <el-row class="title border-bottom">
         <el-col :span="20" style="border-right: 1px solid #ccc">
-          {{ scoreboardData.contest.name }}
+          {{ scoreboardData.contestDetail.name }}
         </el-col>
         <el-col :span="4" style="border-right: 1px solid #ccc"> score </el-col>
       </el-row>
     </el-col>
-    <el-col :span="18">
+    <el-col :span="16">
       <div class="problem-col title border-bottom">
         <div class="problem-title" v-for="item in scoreboardData.problems" :key="item.id">
-          <span>{{ item.shortname }}</span>
+          <span>{{ item.shortName }}</span>
           <div class="circle" :style="{ 'background-color': item.color }"></div>
         </div>
       </div>
@@ -30,16 +33,16 @@ defineProps<{
   </el-row>
   <AutoScroll class="scoreboard-main">
     <el-row>
-      <el-col :span="6">
+      <el-col :span="8">
         <TransitionGroup name="list" tag="div">
-          <TeamInfo v-for="team in scoreboardData.teams" :key="team.name" :teamInfo="team" />
+          <TeamInfo v-for="team in scoreboardData.teams" :key="team.id" :teamInfo="team" />
         </TransitionGroup>
       </el-col>
-      <el-col :span="18">
+      <el-col :span="16">
         <TransitionGroup name="list" tag="div">
           <ProblemResult
             v-for="team in scoreboardData.teams"
-            :key="team.name"
+            :key="team.id"
             :submissions="team.submissions"
           />
         </TransitionGroup>

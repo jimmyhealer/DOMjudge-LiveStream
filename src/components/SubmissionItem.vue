@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Submission } from '@/types'
+import type { LastSubmission } from '@/types'
 
 defineProps<{
-  data: Submission
+  data: LastSubmission
 }>()
 </script>
 <template>
@@ -33,7 +33,7 @@ defineProps<{
           'border-bottom': '3px solid ' + data.problem.color
         }"
       >
-        {{ data.problem.shortname }}
+        {{ data.problem.shortName }}
       </span>
     </el-col>
     <el-col :span="4">

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { TeamRow } from '@/types'
+import type { Team } from '@/types'
 
 defineProps<{
-  teamInfo: TeamRow
+  teamInfo: Team
 }>()
 </script>
 
@@ -49,7 +49,7 @@ p,
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 52px;
+  height: 31px;
 }
 
 .border-right {
