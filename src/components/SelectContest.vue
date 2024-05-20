@@ -84,7 +84,6 @@ function handleSelectionChange(val: any) {
         </draggable>
       </div>
     </template>
-    <!-- TODO: if not input Api credentials need show -->
     <el-alert type="info" show-icon :closable="true">
       <p>
         No contest found? Please make sure you have create the public contest <br />

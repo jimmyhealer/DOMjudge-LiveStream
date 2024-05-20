@@ -13,7 +13,6 @@ import SuccessInfo from '@/components/SuccessInfo.vue'
 
 import logo from '@/assets/domjudge.png'
 
-const contestApi = new ContestApi()
 const useContest = useContestStore()
 const setpActive = ref(0)
 const domjudgeForm = reactive({
@@ -45,10 +44,8 @@ async function nextHandler() {
     if (setpActive.value === 0) {
       completeFlag = await handleDomjudgeForm()
     } else if (setpActive.value === 1) {
-      // TODO: handle select contest
       completeFlag = await handleSelectContest()
     } else if (setpActive.value === 2) {
-      // TODO: handle Upload image
       completeFlag = await handleUploadImage()
     }
   } finally {
@@ -68,13 +65,8 @@ async function handleDomjudgeForm() {
     return false
   }
 
-  contestApi.register(domjudgeForm.url, {
-    username: domjudgeForm.username,
-    password: domjudgeForm.password
-  })
-
   try {
-    const data = await contestApi.getContests()
+    const data = await ContestApi.getContests()
     tableData.value = data.map((item: any) => ({
       startTime: dateToFormat(item.startTime),
       endTime: dateToFormat(item.endTime),
@@ -143,7 +135,6 @@ async function handleFinish() {
         <el-button text @click="backHandler">
           {{ setpActive === 0 ? 'Cancel' : 'Back' }}
         </el-button>
-        <!-- TODO: check disabled -->
         <el-button type="primary" @click="nextHandler" :loading="isLoading">
           {{ isLoading ? 'Loading...' : setpActive === 2 ? 'Finish' : 'Next' }}
         </el-button>

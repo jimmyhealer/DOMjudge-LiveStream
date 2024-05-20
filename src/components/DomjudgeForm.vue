@@ -8,7 +8,6 @@ const domjudgeForm = defineModel<{
   username: string
   password: string
 }>('domjudgeForm', { required: true })
-const contestApi = new ContestApi()
 
 const rules = {
   url: [
@@ -21,8 +20,7 @@ const rules = {
     {
       validator: async (_: any, value: any, callback: any) => {
         try {
-          contestApi.register(value)
-          await contestApi.getContests()
+          await ContestApi.getContests()
         } catch (error) {
           callback(new Error('Invalid Url'))
         }
