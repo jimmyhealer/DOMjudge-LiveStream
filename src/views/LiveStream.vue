@@ -9,12 +9,12 @@ import ScoreBoard from '@/components/ScoreBoard.vue'
 import ImageCarousel from '@/components/ImageCarousel.vue'
 
 const { start } = useLiveStream()
-const { checkScoreboard, getLastSubmission } = useLiveStreamStore()
+const { checkScoreboard, checkLastSubmission } = useLiveStreamStore()
 const contestStore = useContestStore()
 
 const isInitialized = ref(false)
 onMounted(async () => {
-  start(contestStore.contests?.map((contest) => contest.id) || [])
+  await start(contestStore.contests?.map((contest) => contest.id) || [])
   isInitialized.value = true
 })
 </script>
@@ -36,8 +36,8 @@ onMounted(async () => {
               <ScoreBoard :contestId="id" />
             </template>
           </el-col>
-          <el-col :span="4" v-if="getLastSubmission(id)" class="last-submission">
-            <LastSubmission :submissions="getLastSubmission(id)" />
+          <el-col :span="4" v-if="checkLastSubmission(id)" class="last-submission">
+            <LastSubmission :contestId="id" />
             <ImageCarousel v-if="contestStore.images" :images="contestStore.images" />
           </el-col>
         </template>
@@ -67,12 +67,12 @@ onMounted(async () => {
   transform: translate(-50%, -50%);
 }
 
-.countdown >>> .el-statistic__head {
+.countdown :deep(.el-statistic__head) {
   text-align: center;
   font-size: 30px;
 }
 
-.countdown >>> .el-statistic__content {
+.countdown :deep(.el-statistic__content) {
   text-align: center;
   font-size: 64px;
 }

@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import type { LastSubmission } from '@/types'
-
 import SubmissionItem from '@/components/SubmissionItem.vue'
+import { useLiveStreamStore } from '@/stores/livestream'
 
 defineProps<{
-  submissions: LastSubmission[] | undefined
+  contestId: string
 }>()
+
+const { getLastSubmission } = useLiveStreamStore()
 </script>
 
 <template>
-  <template v-if="submissions">
-    <TransitionGroup name="list" tag="div">
-      <SubmissionItem v-for="item in submissions" :key="item.id" :data="item" />
-    </TransitionGroup>
-  </template>
+  <TransitionGroup name="list" tag="div">
+    <SubmissionItem v-for="item in getLastSubmission(contestId)" :key="item.id" :data="item" />
+  </TransitionGroup>
 </template>
