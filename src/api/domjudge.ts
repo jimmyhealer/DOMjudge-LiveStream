@@ -1,58 +1,52 @@
 import { DomjudgeFetch } from '@/api/basic'
-import type { Contest, AuthorizationOptions } from '@/types'
+import * as Types from '@/types'
 
 abstract class DomjudgeApi {
-  protected domjudge: DomjudgeFetch | null = null
-
-  public register(url: string, options?: AuthorizationOptions): void {
-    const { username = '', password = '' } = options || {}
-
-    this.domjudge = new DomjudgeFetch(url, username, password)
-  }
+  protected static domjudge: DomjudgeFetch = new DomjudgeFetch(
+    '/domjudge',
+    import.meta.env.VITE_DOMJUDGE_USERNAME as string,
+    import.meta.env.VITE_DOMJUDGE_PASSWORD as string
+  )
 }
 
 export class ContestApi extends DomjudgeApi {
-  public async getContests(
+  public static async getContests(
     { onlyActive }: { onlyActive?: boolean } = {
       onlyActive: false
     }
-  ): Promise<Contest[]> {
+  ): Promise<Types.ContestDetailDTO[]> {
     return await this.domjudge?.fetchApi(`contests?onlyActive=${onlyActive}`)
   }
 
-  public async getContest(id: string): Promise<Contest> {
+  public static async getContest(id: string): Promise<Types.ContestDetailDTO> {
     return await this.domjudge?.fetchApi(`contests/${id}`)
   }
 
-  public async getContestState(id: string): Promise<any> {
+  public static async getContestState(id: string): Promise<Types.ContestStateDTO> {
     return await this.domjudge?.fetchApi(`contests/${id}/state`)
   }
 
-  public async getContestStatus(id: string): Promise<any> {
-    return await this.domjudge?.fetchApi(`contests/${id}/status`)
-  }
-
-  public async getContestProblems(id: string): Promise<any> {
+  public static async getProblems(id: string): Promise<Types.ProblemDTO[]> {
     return await this.domjudge?.fetchApi(`contests/${id}/problems`)
   }
 
-  public async getScoreboard(id: string): Promise<any> {
+  public static async getScoreboard(id: string): Promise<Types.ScoreboardDTO> {
     return await this.domjudge?.fetchApi(`contests/${id}/scoreboard?public=true`)
   }
 
-  public async getSubmissions(contestId: string): Promise<any> {
+  public static async getSubmissions(contestId: string): Promise<Types.LastSubmissionDTO[]> {
     return await this.domjudge?.fetchApi(`contests/${contestId}/submissions`)
   }
 
-  public async getJudgements(contestId: string): Promise<any> {
+  public static async getJudgements(contestId: string): Promise<Types.JudgementDTO[]> {
     return await this.domjudge?.fetchApi(`contests/${contestId}/judgements`)
   }
 
-  public async getTeamInfos(contestId: string): Promise<any> {
+  public static async getTeamInfos(contestId: string): Promise<Types.TeamDTO[]> {
     return await this.domjudge?.fetchApi(`contests/${contestId}/teams?public=true`)
   }
 
-  public async getEvents(contestId: string): Promise<any> {
+  public static async getEvents(contestId: string): Promise<any> {
     return await this.domjudge?.fetchApi(`contests/${contestId}/event-feed`)
   }
 }
