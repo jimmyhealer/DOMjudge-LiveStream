@@ -1,4 +1,5 @@
 import { DomjudgeFetch } from '@/api/basic'
+import { cache } from '@/api/cache'
 import * as Types from '@/types'
 
 abstract class DomjudgeApi {
@@ -10,6 +11,7 @@ abstract class DomjudgeApi {
 }
 
 export class ContestApi extends DomjudgeApi {
+  @cache(60000)
   public static async getContests(
     { onlyActive }: { onlyActive?: boolean } = {
       onlyActive: false
@@ -18,14 +20,17 @@ export class ContestApi extends DomjudgeApi {
     return await this.domjudge?.fetchApi(`contests?onlyActive=${onlyActive}`)
   }
 
+  @cache(60000)
   public static async getContest(id: string): Promise<Types.ContestDetailDTO> {
     return await this.domjudge?.fetchApi(`contests/${id}`)
   }
 
+  @cache(60000)
   public static async getContestState(id: string): Promise<Types.ContestStateDTO> {
     return await this.domjudge?.fetchApi(`contests/${id}/state`)
   }
 
+  @cache(60000)
   public static async getProblems(id: string): Promise<Types.ProblemDTO[]> {
     return await this.domjudge?.fetchApi(`contests/${id}/problems`)
   }
@@ -42,6 +47,7 @@ export class ContestApi extends DomjudgeApi {
     return await this.domjudge?.fetchApi(`contests/${contestId}/judgements`)
   }
 
+  @cache(60000)
   public static async getTeamInfos(contestId: string): Promise<Types.TeamDTO[]> {
     return await this.domjudge?.fetchApi(`contests/${contestId}/teams?public=true`)
   }

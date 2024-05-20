@@ -3,11 +3,27 @@ import { useLiveStreamStore } from '@/stores/livestream'
 import { useScoreboard } from './scoreboard'
 import { useLastSubmission } from './lastSubmission'
 
-const POLLING_INTERVAL = 3000
+const POLLING_INTERVAL = 1000
 export function useLiveStream() {
   let isStart = false
   let intervalId: number | null = null
   const { initScoreboard } = useLiveStreamStore()
+
+  let isRunning = false
+  async function doInterval(updates: (() => any)[]) {
+    if (isRunning) {
+      return
+    }
+    isRunning = true
+
+    try {
+      await Promise.all(updates.map((update) => update()))
+    } catch (error) {
+      console.error('Failed to update live stream:', error)
+    }
+
+    isRunning = false
+  }
 
   async function start(contestId: string[]) {
     if (isStart) {
@@ -27,13 +43,8 @@ export function useLiveStream() {
       updates.push(() => getLastSubmission())
     }
 
-    intervalId = setInterval(async () => {
-      try {
-        await Promise.all(updates.map((update) => update()))
-      } catch (error) {
-        console.error('Failed to update live stream:', error)
-      }
-    }, POLLING_INTERVAL)
+    await doInterval(updates)
+    intervalId = setInterval(async () => doInterval(updates), POLLING_INTERVAL)
 
     isStart = true
   }
