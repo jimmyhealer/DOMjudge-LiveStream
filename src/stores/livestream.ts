@@ -50,9 +50,13 @@ export const useLiveStreamStore = defineStore('livestream', () => {
     getScoreboard(contestId)!.teams = teams
   }
 
+  function checkLastSubmission(contestId: string): boolean {
+    return lastSubmission.value.has(contestId)
+  }
+
   function getLastSubmission(contestId: string): Types.LastSubmission[] {
-    if (!lastSubmission.value.has(contestId)) {
-      return []
+    if (!checkLastSubmission(contestId)) {
+      throw new Error(`Last submission ${contestId} not found`)
     }
 
     return lastSubmission.value.get(contestId)!
@@ -73,6 +77,7 @@ export const useLiveStreamStore = defineStore('livestream', () => {
     setProblems,
     getTeams,
     setTeams,
+    checkLastSubmission,
     getLastSubmission,
     setLastSubmission
   }

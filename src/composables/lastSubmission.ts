@@ -9,6 +9,7 @@ export function useLastSubmission(contestId: string) {
   async function getLastSubmission(): Promise<void> {
     const lastSubmissionDTO = await ContestApi.getSubmissions(contestId)
     const judgementsDTO = await ContestApi.getJudgements(contestId)
+    const teamsDTO = await ContestApi.getTeamInfos(contestId)
     const contestDetail = getContestDetail(contestId)
     const teams = getTeams(contestId)
     const problems = getProblems(contestId)
@@ -18,7 +19,7 @@ export function useLastSubmission(contestId: string) {
         // Filter out submissions that are not in the public contest
         const submissionTime = new Date(submission.time)
         return (
-          teams.some((team) => team.id === submission.teamId) &&
+          teamsDTO.some((team) => team.id === submission.teamId) &&
           submissionTime >= contestDetail.startTime &&
           submissionTime <= contestDetail.endTime
         )
