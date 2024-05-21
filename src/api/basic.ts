@@ -43,7 +43,7 @@ class FetchTemplate {
 
   public async fetchApi(path: string, options: RequestInit = {}): Promise<any> {
     const processedOptions = this.preprocessOptions(options)
-    const response = await fetch(`${this.url}/api/v4/${path}`, {
+    const response = await fetch(`${this.url}/${path}`, {
       ...processedOptions
     })
     return this.postprocessResponse(response)
@@ -55,44 +55,7 @@ class FetchTemplate {
 }
 
 export class DomjudgeFetch extends FetchTemplate {
-  private username: string
-  private password: string
-
-  constructor(url: string, username: string, password: string) {
-    super(url)
-
-    this.username = username
-    this.password = password
+  constructor() {
+    super('api')
   }
-
-  protected preprocessOptions(options: RequestInit): RequestInit {
-    const defaultHeaders: any = {
-      'Content-Type': 'application/json'
-    }
-
-    if (this.username !== '' && this.password !== '') {
-      defaultHeaders['Authorization'] = `Basic ${btoa(`${this.username}:${this.password}`)}`
-    }
-
-    return {
-      ...options,
-      headers: {
-        ...defaultHeaders,
-        ...options.headers
-      }
-    }
-  }
-
-  // public async fetchApi(path: string, options: RequestInit = {}): Promise<any> {
-  //   const processedOptions = this.preprocessOptions(options)
-  //   const response = await fetch(`/api/proxy`, {
-  //     ...processedOptions,
-  //     body: JSON.stringify({
-  //       url: `${this.url}/api/v4/${path}`
-  //     }),
-  //     method: 'POST'
-  //   })
-
-  //   return this.postprocessResponse(response)
-  // }
 }

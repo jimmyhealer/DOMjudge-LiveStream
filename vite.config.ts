@@ -14,18 +14,6 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/domjudge': {
-        target: 'https://domjudge.aclab.cool/',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/domjudge/, ''),
-        configure: (proxy, options) => {
-          proxy.on('proxyRes', (proxyRes, req, res) => {
-            if (proxyRes.headers['www-authenticate']) {
-              delete proxyRes.headers['www-authenticate']
-            }
-          })
-        }
-      },
       '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true
