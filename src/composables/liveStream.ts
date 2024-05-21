@@ -9,20 +9,16 @@ export function useLiveStream() {
   let intervalId: number | null = null
   const { initScoreboard } = useLiveStreamStore()
 
-  let isRunning = false
   async function doInterval(updates: (() => any)[]) {
-    if (isRunning) {
-      return
-    }
-    isRunning = true
-
     try {
       await Promise.all(updates.map((update) => update()))
     } catch (error) {
       console.error('Failed to update live stream:', error)
     }
 
-    isRunning = false
+    if (isStart) {
+      intervalId = setTimeout(async () => doInterval(updates), POLLING_INTERVAL)
+    }
   }
 
   async function start(contestId: string[]) {
@@ -44,15 +40,14 @@ export function useLiveStream() {
     }
 
     await doInterval(updates)
-    intervalId = setInterval(async () => doInterval(updates), POLLING_INTERVAL)
-
-    isStart = true
+    intervalId = setTimeout(async () => doInterval(updates), POLLING_INTERVAL)
   }
 
   function stop() {
     if (intervalId !== null) {
-      clearInterval(intervalId)
+      clearTimeout(intervalId)
       intervalId = null
+      isStart = false
     }
   }
 
