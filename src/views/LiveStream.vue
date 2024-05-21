@@ -6,43 +6,61 @@ import { useLiveStreamStore } from '@/stores/livestream'
 import { useLiveStream } from '@/composables/liveStream'
 import LastSubmission from '@/components/LastSubmission.vue'
 import ScoreBoard from '@/components/ScoreBoard.vue'
+import ContestCountdown from '@/components/ContestCountdown.vue'
 import ImageCarousel from '@/components/ImageCarousel.vue'
+import LiveStreamFooter from '@/components/LiveStreamFooter.vue'
 
 const { start } = useLiveStream()
-const { checkScoreboard, checkLastSubmission } = useLiveStreamStore()
+const { checkScoreboard, checkLastSubmission, getContestDetail } = useLiveStreamStore()
 const contestStore = useContestStore()
+
+function getMaxContestTime() {
+  const result = contestStore.contests?.map((contest) => getContestDetail(contest.id).endTime) ?? []
+  return Math.max(...result.map((date) => date.getTime()))
+}
 
 const isInitialized = ref(false)
 onMounted(async () => {
-  await start(contestStore.contests?.map((contest) => contest.id) || [])
+  await start(contestStore.contests?.map((contest) => contest.id ?? contest) || [])
   isInitialized.value = true
 })
 </script>
 
 <template>
   <div class="scoreboard" style="overflow: hidden" v-loading.fullscreen.lock="!isInitialized">
-    <template v-for="{ id } in contestStore.contests" :key="id">
-      <el-row style="height: 50%; border: 1px solid #ccc">
-        <template v-if="false">
-          <!-- <el-countdown
-            class="countdown"
-            :title="'Start to contest ' + scoreboardData.get(id)?.contestDetail.name"
-            :value="scoreboardData.get(id)?.contestDetail.startTime"
-          /> -->
-        </template>
-        <template v-else>
-          <el-col :span="20" style="height: 100%">
+    <el-row v-if="isInitialized">
+      <el-col :span="20" style="height: 100vh">
+        <div style="height: calc(100% - 48px); position: relative">
+          <template v-for="{ id } in contestStore.contests" :key="id">
             <template v-if="checkScoreboard(id)">
-              <ScoreBoard :contestId="id" />
+              <div :style="{ height: `${100 / contestStore.contests!.length}%` }">
+                <ContestCountdown :contestId="id" />
+                <ScoreBoard :contestId="id" />
+              </div>
             </template>
-          </el-col>
-          <el-col :span="4" v-if="checkLastSubmission(id)" class="last-submission">
-            <LastSubmission :contestId="id" />
-            <ImageCarousel v-if="contestStore.images" :images="contestStore.images" />
-          </el-col>
+          </template>
+        </div>
+        <LiveStreamFooter :time="getMaxContestTime()" />
+      </el-col>
+      <el-col :span="4" class="last-submission" ref="submissionEl">
+        <ImageCarousel
+          v-if="contestStore.images && contestStore.images.length > 0"
+          :images="contestStore.images"
+          style="margin-bottom: auto"
+        />
+        <template v-for="{ id } in contestStore.contests" :key="id">
+          <div
+            class="last-submission-item"
+            ref="el"
+            :style="{
+              height: `${100 / contestStore.contests!.length}%`
+            }"
+          >
+            <LastSubmission :contestId="id" v-if="checkLastSubmission(id)" />
+          </div>
         </template>
-      </el-row>
-    </template>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -57,47 +75,18 @@ onMounted(async () => {
 .last-submission {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: end;
+  padding-right: 6px;
 }
 
-.countdown {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
+.last-submission-item {
+  margin: 0px 4px 10px;
+  border-radius: 6px;
+  background-color: aquamarine;
+  padding: 8px;
 
-.countdown :deep(.el-statistic__head) {
-  text-align: center;
-  font-size: 30px;
-}
-
-.countdown :deep(.el-statistic__content) {
-  text-align: center;
-  font-size: 64px;
-}
-
-.el-row {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
-}
-</style>
-
-<style>
-.list-move,
-.list-enter-active,
-.list-leave-active {
-  transition: all 0.5s ease;
-}
-
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-.list-leave-active {
-  position: absolute;
 }
 </style>
