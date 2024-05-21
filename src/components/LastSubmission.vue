@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import SubmissionItem from '@/components/SubmissionItem.vue'
 import { useLiveStreamStore } from '@/stores/livestream'
+import { useElementSize } from '@vueuse/core'
+import { ref, watchEffect } from 'vue'
 
-defineProps<{
+const props = defineProps<{
   contestId: string
 }>()
 
@@ -11,6 +13,18 @@ const { getLastSubmission, getContestDetail } = useLiveStreamStore()
 function displayContestName(name: string) {
   return name.split('-').at(-1)
 }
+
+const itemHeight = 28
+const lastSubmission = ref()
+const lastSubmissionEl = ref(null)
+const { height } = useElementSize(lastSubmissionEl)
+
+watchEffect(() => {
+  const result = getLastSubmission(props.contestId)
+  const itemCount = Math.floor(height.value / itemHeight)
+  console.log(height.value)
+  lastSubmission.value = result.slice(Math.max(result.length - itemCount, 0), result.length)
+})
 </script>
 
 <template>
@@ -20,7 +34,12 @@ function displayContestName(name: string) {
       {{ displayContestName(getContestDetail(contestId).shortName) }}
     </p>
   </div>
-  <TransitionGroup name="list" tag="div">
-    <SubmissionItem v-for="item in getLastSubmission(contestId)" :key="item.id" :data="item" />
-  </TransitionGroup>
+  <div
+    style="height: 100%; display: flex; flex-direction: column; justify-content: end"
+    ref="lastSubmissionEl"
+  >
+    <TransitionGroup name="list" tag="div">
+      <SubmissionItem v-for="item in lastSubmission" :key="item.id" :data="item" />
+    </TransitionGroup>
+  </div>
 </template>

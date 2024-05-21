@@ -2,7 +2,6 @@ import { ContestApi } from '@/api'
 import { useLiveStreamStore } from '@/stores/livestream'
 import * as Types from '@/types'
 
-const MAX_LAST_SUBMISSIONS_LIST = 10
 export function useLastSubmission(contestId: string) {
   const { getContestDetail, getProblems, getTeams, setLastSubmission } = useLiveStreamStore()
 
@@ -14,7 +13,7 @@ export function useLastSubmission(contestId: string) {
     const teams = getTeams(contestId)
     const problems = getProblems(contestId)
 
-    let result = lastSubmissionDTO
+    const result = lastSubmissionDTO
       .filter((submission) => {
         // Filter out submissions that are not in the public contest
         const submissionTime = new Date(submission.time)
@@ -48,7 +47,6 @@ export function useLastSubmission(contestId: string) {
         }
       })
 
-    result = result.slice(Math.max(result.length - MAX_LAST_SUBMISSIONS_LIST, 0), result.length)
     setLastSubmission(contestId, result)
   }
 
