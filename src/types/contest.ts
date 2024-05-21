@@ -4,6 +4,7 @@ export interface ContestDetail {
   frozenTime: Date
   id: string
   name: string
+  shortName: string
 }
 
 export interface ContestDetailDTO {
@@ -12,6 +13,7 @@ export interface ContestDetailDTO {
   scoreboardFreezeDuration: string
   id: string
   name: string
+  shortname: string
 }
 
 export class ContestMapper {
@@ -21,7 +23,8 @@ export class ContestMapper {
       endTime: new Date(data.endTime),
       frozenTime: new Date(data.endTime),
       id: data.id,
-      name: data.name
+      name: data.name,
+      shortName: data.shortname
     }
   }
 }

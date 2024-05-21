@@ -31,7 +31,8 @@ export function useScoreboard(contestId: string) {
       name: contest.name,
       startTime: contest.startTime,
       endTime: contest.endTime,
-      frozenTime: frozenTime
+      frozenTime: frozenTime,
+      shortName: contest.shortName
     }
 
     setContestDetail(contestId, result)
