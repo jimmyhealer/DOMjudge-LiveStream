@@ -82,8 +82,9 @@ onMounted(async () => {
 .last-submission-item {
   margin: 0px 4px 10px;
   border-radius: 6px;
-  background-color: aquamarine;
-  padding: 8px;
+  background-color: #2b92ff;
+  color: white;
+  padding: 6px;
 
   display: flex;
   flex-direction: column;

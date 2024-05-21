@@ -22,7 +22,6 @@ const { height } = useElementSize(lastSubmissionEl)
 watchEffect(() => {
   const result = getLastSubmission(props.contestId)
   const itemCount = Math.floor(height.value / itemHeight)
-  console.log(height.value)
   lastSubmission.value = result.slice(Math.max(result.length - itemCount, 0), result.length)
 })
 </script>
