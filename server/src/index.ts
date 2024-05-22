@@ -24,11 +24,13 @@ const username = Bun.env.DOMJUDGE_USERNAME
 const password = Bun.env.DOMJUDGE_PASSWORD
 
 async function domjudgeFetch(path: string) {
-  console.log(`${DomjudgeApi}/api/v4/${path}, ${username}, ${password}`)
-  const res = await fetch(`${DomjudgeApi}/api/v4/${path}`, {
+  const apiEndpoint = `${DomjudgeApi}/api/v4/${path}`
+  const authHeader = `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`
+
+  const res = await fetch(apiEndpoint, {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`
+      Authorization: authHeader
     }
   })
 
