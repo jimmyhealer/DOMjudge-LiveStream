@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, type UploadFile } from 'element-plus'
 
 import { ContestApi } from '@/api'
 import { dateToFormat } from '@/utils'
 import { useContestStore } from '@/stores/contest'
-import DomjudgeForm from '@/components/DomjudgeForm.vue'
 import SelectContest from '@/components/SelectContest.vue'
 import UploadImage from '@/components/UploadImage.vue'
 import SuccessInfo from '@/components/SuccessInfo.vue'
@@ -42,10 +41,8 @@ async function nextHandler() {
   isLoading.value = true
   try {
     if (setpActive.value === 0) {
-      completeFlag = await handleDomjudgeForm()
-    } else if (setpActive.value === 1) {
       completeFlag = await handleSelectContest()
-    } else if (setpActive.value === 2) {
+    } else if (setpActive.value === 1) {
       completeFlag = await handleUploadImage()
     }
   } finally {
@@ -55,30 +52,6 @@ async function nextHandler() {
   if (completeFlag) {
     setpActive.value = Math.min(3, setpActive.value + 1)
   }
-}
-
-const domjudgeFormRef = ref()
-// TODO: if domjudge change, need to re-register and clear the tableData
-// Maybe not need
-async function handleDomjudgeForm() {
-  if (!domjudgeFormRef.value || !(await domjudgeFormRef.value.validate())) {
-    return false
-  }
-
-  try {
-    const data = await ContestApi.getContests()
-    tableData.value = data.map((item: any) => ({
-      startTime: dateToFormat(item.startTime),
-      endTime: dateToFormat(item.endTime),
-      name: item.name,
-      id: item.id
-    }))
-  } catch (error) {
-    ElMessage.error('Domjudge Url or Username or Password is incorrect')
-    return false
-  }
-
-  return true
 }
 
 async function handleSelectContest() {
@@ -104,6 +77,16 @@ async function handleFinish() {
 
   await router.push('/live')
 }
+
+onMounted(async () => {
+  const data = await ContestApi.getContests()
+  tableData.value = data.map((item: any) => ({
+    startTime: dateToFormat(item.startTime),
+    endTime: dateToFormat(item.endTime),
+    name: item.name,
+    id: item.id
+  }))
+})
 </script>
 
 <template>
@@ -115,28 +98,26 @@ async function handleFinish() {
         align-center
         finish-status="success"
       >
-        <el-step title="Set Domjudge" />
         <el-step title="Select Contest" />
         <el-step title="Upload Image" />
       </el-steps>
-      <DomjudgeForm ref="domjudgeFormRef" :domjudge-form="domjudgeForm" v-show="setpActive === 0" />
       <SelectContest
         :tableData="tableData"
         v-model:selectContests="selectContests"
-        v-show="setpActive === 1"
+        v-show="setpActive === 0"
       />
-      <div v-show="setpActive === 2">
+      <div v-show="setpActive === 1">
         <UploadImage v-model:file-list="fileList" :contestCount="selectContests.length" />
       </div>
-      <div v-show="setpActive === 3">
+      <div v-show="setpActive === 2">
         <SuccessInfo @handler-finish="handleFinish" />
       </div>
-      <el-container style="justify-content: end; margin-top: 20px" v-if="setpActive !== 3">
+      <el-container style="justify-content: end; margin-top: 20px" v-if="setpActive !== 2">
         <el-button text @click="backHandler">
           {{ setpActive === 0 ? 'Cancel' : 'Back' }}
         </el-button>
         <el-button type="primary" @click="nextHandler" :loading="isLoading">
-          {{ isLoading ? 'Loading...' : setpActive === 2 ? 'Finish' : 'Next' }}
+          {{ isLoading ? 'Loading...' : setpActive === 1 ? 'Finish' : 'Next' }}
         </el-button>
       </el-container>
     </el-main>
