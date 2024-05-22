@@ -74,7 +74,7 @@ async function handleFinish() {
 
 onMounted(async () => {
   const data = await ContestApi.getContests({
-    onlyActive: true
+    onlyActive: false
   })
   tableData.value = data.map((item: any) => ({
     startTime: dateToFormat(item.startTime),
