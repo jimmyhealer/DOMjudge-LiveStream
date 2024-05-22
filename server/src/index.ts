@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express'
 import { JSONFilePreset } from 'lowdb/node'
 import { Server as WebSocketServer } from 'ws'
-import 'dotenv/config'
+import path from 'path'
 const app = express()
 
 const defaultData = {
@@ -19,11 +19,12 @@ const wss = new WebSocketServer({ server })
 
 app.use(express.json())
 
-const DomjudgeApi = process.env.DOMJUDGE_API
-const username = process.env.DOMJUDGE_USERNAME
-const password = process.env.DOMJUDGE_PASSWORD
+const DomjudgeApi = Bun.env.DOMJUDGE_API
+const username = Bun.env.DOMJUDGE_USERNAME
+const password = Bun.env.DOMJUDGE_PASSWORD
 
 async function domjudgeFetch(path: string) {
+  console.log(`${DomjudgeApi}/api/v4/${path}, ${username}, ${password}`)
   const res = await fetch(`${DomjudgeApi}/api/v4/${path}`, {
     headers: {
       'Content-Type': 'application/json',
@@ -113,3 +114,12 @@ wss.on('connection', (ws) => {
     console.log(`Received message => ${message}`)
   })
 })
+
+if (Bun.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'public')))
+
+  app.get('*', (req, res) => {
+    console.log(path.join(__dirname, 'public', 'index.html'))
+    res.sendFile(path.join(__dirname, 'public', 'index.html'))
+  })
+}
