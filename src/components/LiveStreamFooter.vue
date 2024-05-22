@@ -9,7 +9,7 @@ const currentIndex = ref(0)
 const marqueeItems = ref([])
 
 const marqueeStyle = computed(() => ({
-  transform: `translateY(-${currentIndex.value * (100 / marqueeItems.value.length ?? 1)}%)`,
+  transform: `translateY(-${currentIndex.value * (100 / marqueeItems.value.length)}%)`,
   transition: 'transform 0.5s ease-in-out'
 }))
 
