@@ -8,7 +8,7 @@ const defaultData = {
   marqueeItems: ['Welcome to the contest!'],
   contests: []
 }
-const db = await JSONFilePreset('db.json', defaultData)
+const db = await JSONFilePreset('volume/db.json', defaultData)
 
 const port = 3000
 const server = app.listen(port, () => {
