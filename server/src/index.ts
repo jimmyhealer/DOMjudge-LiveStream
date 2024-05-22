@@ -1,7 +1,23 @@
 import express, { Request, Response } from 'express'
+import { JSONFilePreset } from 'lowdb/node'
+import { Server as WebSocketServer } from 'ws'
 import 'dotenv/config'
 const app = express()
+
+const defaultData = {
+  marqueeItems: ['Welcome to the contest!'],
+  contests: []
+}
+const db = await JSONFilePreset('db.json', defaultData)
+
 const port = 3000
+const server = app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`)
+})
+
+const wss = new WebSocketServer({ server })
+
+app.use(express.json())
 
 const DomjudgeApi = process.env.DOMJUDGE_API
 const username = process.env.DOMJUDGE_USERNAME
@@ -63,6 +79,37 @@ app.get('/api/contests/:id/event-feed', async (req: Request, res: Response) => {
   res.send(await domjudgeFetch(`contests/${id}/event-feed`))
 })
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`)
+app.post('/api/marquee', async (req: Request, res: Response) => {
+  const item = req.body
+
+  db.data.marqueeItems = item.marqueeItems
+  await db.write()
+
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify(item))
+    }
+  })
+
+  res.send(item)
+})
+
+app.get('/api/marquee', async (req: Request, res: Response) => {
+  const item = db.data.marqueeItems || {}
+  res.send({
+    marqueeItems: item
+  })
+})
+
+app.delete('/api/marquee', async (req: Request, res: Response) => {
+  db.data.marqueeItems = []
+  await db.write()
+  res.send('OK')
+})
+
+wss.on('connection', (ws) => {
+  console.log('Client connected')
+  ws.on('message', (message) => {
+    console.log(`Received message => ${message}`)
+  })
 })

@@ -13,10 +13,14 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@types/better-sqlite3": "^7.6.10",
     "@types/node": "^20.12.12",
+    "better-sqlite3": "^10.0.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "lowdb": "^7.0.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "ws": "^8.17.0"
   }
 }
