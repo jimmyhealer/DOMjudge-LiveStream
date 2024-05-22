@@ -1,39 +1,110 @@
-# domjudge-livestream-tools
+# A Domjudge Scoreboard Contest Live Stream Tools
 
-This template should help get you started developing with Vue 3 in Vite.
+![License](https://img.shields.io/github/license/jimmyhealer/DOMjudge-LiveStream)
+![Version](https://img.shields.io/github/v/release/jimmyhealer/DOMjudge-LiveStream)
 
-## Recommended IDE Setup
+![Logo](src/assets/domjudge.png)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Overview
 
-## Type Support for `.vue` Imports in TS
+A Domjudge Scoreboard Contest Live Stream Tools is a web application developed using Vue 3 and Express. This tool is designed to provide a live stream of the scoreboard during programming contests managed by Domjudge. It is highly customizable and easy to deploy with Docker.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## Features
 
-## Customize configuration
+- Real-time scoreboard updates
+- User-friendly interface
+- Easy to set up and deploy with Docker
+- Developed with modern technologies: Vue 3, Express, Vite, and Bun
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## Installation
 
-## Project Setup
+### Prerequisites
 
-```sh
-bun install
+- Docker
+- Node.js (if running without Docker)
+
+### Docker Deployment
+
+1. Pull the Docker image from the repository:
+
+   ```sh
+   docker pull jimmyhealer/domjudge-live
+   ```
+
+2. Create a Docker volume:
+
+   ```sh
+   docker volume create --name live-db
+   ```
+
+3. Run the Docker container:
+
+   ```sh
+   docker run -itd -p 80:3000 -e DOMJUDGE_API=[YOUR_DOMJUDGE_URL] -e DOMJUDGE_USERNAME=[YOUR_DOMJUDGE_API_USERNAME] -e DOMJUDGE_PASSWORD=[YOUR_DOMJUDGE_API_PASSWORD] --name domjudge-live -v live-db:/app/server/volume jimmyhealer/domjudge-live
+   ```
+
+   `-e DOMJUDGE_API` is the URL of your Domjudge API. For example, `http://localhost/domjudge`.\
+   `-e DOMJUDGE_USERNAME` is the username of your Domjudge API.\
+   `-e DOMJUDGE_PASSWORD` is the password of your Domjudge API.
+
+4. Access the application at `http://localhost`.
+
+### Local Development
+
+1. Clone the repository:
+
+   ```sh
+   git clone https://github.com/jimmyhealer/DOMjudge-LiveStream.git
+   ```
+
+2. Install dependencies:
+
+   ```sh
+   bun install
+   ```
+
+3. Start the development server:
+
+   ```sh
+   bun dev
+   ```
+
+4. Access the application at `http://localhost:5173`.
+
+## Development
+
+This project is developed using Vite and Bun. Vite is a fast build tool and development server, while Bun is a modern JavaScript runtime.
+
+### Project Structure
+
+```
+.
+├── src
+│   ├── assets
+│   ├── components
+│   ├── router
+│   ├── composable
+│   ├── stores
+│   ├── types
+│   ├── utils
+│   ├── views
+│   ├── App.vue
+│   └── main.ts
+├── server
+|   ├── src
+│       └── index.js
+├── Dockerfile
+└── package.json
 ```
 
-### Compile and Hot-Reload for Development
+## Contributing
 
-```sh
-bun dev
-```
+Contributions are welcome! Please fork the repository and create a pull request with your changes.
 
-### Type-Check, Compile and Minify for Production
+## License
 
-```sh
-bun build
-```
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
-### Lint with [ESLint](https://eslint.org/)
+## Contact
 
-```sh
-bun lint
-```
+If you have any questions or need further assistance, you can issue a request in the repository. Or feel free to contact us at [yahing6066@gmail.com](mailto:yahing6066@gmail.com).
