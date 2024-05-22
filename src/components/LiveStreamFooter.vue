@@ -54,7 +54,7 @@ onMounted(async () => {
         margin: auto;
         margin-left: 8px;
         border-radius: 6px;
-        padding: 3px 6px;
+        padding: 0px 6px;
         color: white;
         font-weight: 500;
         font-size: 18px;
@@ -62,7 +62,7 @@ onMounted(async () => {
         overflow: hidden;
       "
     >
-      <div :style="marqueeStyle">
+      <div :style="marqueeStyle" style="line-height: 32px">
         <div v-for="(item, index) in marqueeItems" :key="index">
           {{ item }}
         </div>

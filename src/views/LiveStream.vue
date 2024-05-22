@@ -57,7 +57,7 @@ onMounted(async () => {
             class="last-submission-item"
             ref="el"
             :style="{
-              height: `${100 / contestStore.contests!.length}%`
+              height: `calc(${100 / contestStore.contests!.length}% - ${120 / contestStore.contests!.length}px)`
             }"
           >
             <LastSubmission :contestId="id" v-if="checkLastSubmission(id)" />
@@ -77,6 +77,7 @@ onMounted(async () => {
 }
 
 .last-submission {
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: end;

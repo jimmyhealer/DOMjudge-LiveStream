@@ -19,7 +19,9 @@ const scoreboardData = useLiveStreamStore().getScoreboard(props.contestId) as Sc
         <el-col :span="20" style="border-right: 1px solid #ccc">
           {{ scoreboardData.contestDetail.name }}
         </el-col>
-        <el-col :span="4" style="border-right: 1px solid #ccc"> score </el-col>
+        <el-col :span="4" style="border-right: 1px solid #ccc">
+          <p style="line-height: 24px">score</p>
+        </el-col>
       </el-row>
     </el-col>
     <el-col :span="16">
