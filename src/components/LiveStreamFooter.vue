@@ -1,7 +1,34 @@
 <script setup lang="ts">
+import { computed, onMounted, ref } from 'vue'
+
 defineProps<{
   time: number
 }>()
+
+const currentIndex = ref(0)
+const marqueeItems = ref([])
+
+const marqueeStyle = computed(() => ({
+  transform: `translateY(-${currentIndex.value * (100 / marqueeItems.value.length ?? 1)}%)`,
+  transition: 'transform 0.5s ease-in-out'
+}))
+
+const ws = new WebSocket(`ws://${window.location.hostname}:${window.location.port}/api`)
+
+ws.onmessage = (event) => {
+  const data = JSON.parse(event.data)
+  marqueeItems.value = data.marqueeItems
+}
+
+onMounted(async () => {
+  const res = await fetch('/api/marquee')
+  const data = await res.json()
+  marqueeItems.value = data.marqueeItems
+
+  setInterval(() => {
+    currentIndex.value = (currentIndex.value + 1) % marqueeItems.value.length
+  }, 5000)
+})
 </script>
 
 <template>
@@ -20,7 +47,7 @@ defineProps<{
         border-radius: 6px;
       "
     />
-    <p
+    <div
       style="
         background-color: seagreen;
         width: calc(100% - 100px);
@@ -32,10 +59,15 @@ defineProps<{
         font-weight: 500;
         font-size: 18px;
         height: 32px;
+        overflow: hidden;
       "
     >
-      跑馬燈
-    </p>
+      <div :style="marqueeStyle">
+        <div v-for="(item, index) in marqueeItems" :key="index">
+          {{ item }}
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
