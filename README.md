@@ -1,4 +1,4 @@
-# A Domjudge Scoreboard Contest Live Stream Tools
+# Domjudge Scoreboard Live Stream Tools
 
 ![License](https://img.shields.io/github/license/jimmyhealer/DOMjudge-LiveStream)
 ![Version](https://img.shields.io/github/v/release/jimmyhealer/DOMjudge-LiveStream)
