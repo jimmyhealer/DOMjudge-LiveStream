@@ -37,7 +37,7 @@ export function useLastSubmission(contestId: string) {
         const result = isFrozen ? null : judgeResult.judgementTypeId
 
         return {
-          id: submission.teamId,
+          id: submission.id,
           teamName: team.name,
           rank: team.rank,
           problem: problem,
