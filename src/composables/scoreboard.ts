@@ -23,7 +23,7 @@ export function useScoreboard(contestId: string) {
     const frozenTime = state.frozen
       ? state.frozen
       : frozenDuration
-        ? processTimeStringToDate(contest.endTime, frozenDuration)
+        ? processTimeStringToDate(new Date(contest.endTime), frozenDuration)
         : contest.endTime
 
     const result = {
