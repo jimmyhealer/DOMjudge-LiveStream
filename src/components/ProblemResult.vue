@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Submission } from '@/types'
-
 defineProps<{
   submissions: Submission[]
 }>()
@@ -27,18 +26,14 @@ function blockColor(sR: Submission) {
   return ColorStatus.NotAttempted
 }
 
-function formatSubmissionNumber(sR: Submission): string {
-  if (!sR.solved) {
-    return (sR.numJudged + sR.numPending).toString()
-  } else if (sR.numJudged + sR.numPending - 1 === 0) {
-    return ''
-  } else {
-    return (sR.numJudged + sR.numPending - 1).toString()
-  }
-}
-
 function formatSubmissionJudged(sR: Submission) {
-  return (sR.solved ? '+' : '-') + formatSubmissionNumber(sR)
+  if (sR.solved) {
+    return `+${Math.max(sR.numJudged - 1, 0) || ' '}`
+  } else if (sR.numPending > 0) {
+    return `${sR.numJudged}+${sR.numPending}`
+  } else {
+    return `-${sR.numJudged}`
+  }
 }
 </script>
 
