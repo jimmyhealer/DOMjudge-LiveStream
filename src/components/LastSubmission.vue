@@ -34,7 +34,7 @@ watchEffect(() => {
     </p>
   </div>
   <div
-    style="height: 100%; display: flex; flex-direction: column; justify-content: end"
+    style="height: calc(100% - 36px); display: flex; flex-direction: column; justify-content: end"
     ref="lastSubmissionEl"
   >
     <TransitionGroup name="list" tag="div">
