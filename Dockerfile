@@ -17,7 +17,7 @@ WORKDIR /app/server
 RUN bun install
 
 COPY ./server .
-COPY --from=build-stage /app/dist ./public
+COPY --from=build-stage /app/dist ./dist/public
 RUN bun tsc
 
 ENV NODE_ENV production
