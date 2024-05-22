@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"vite\" \"bun --watch run server/src/index.ts\"",
+    "dev": "concurrently \"vite --host 0.0.0.0\" \"bun --watch run server/src/index.ts\"",
     "dev:server": "ts-node server/src/index.ts",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
@@ -14,7 +14,6 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
-    "@vercel/node": "^3.0.28",
     "@vueuse/core": "^10.9.0",
     "element-plus": "^2.7.1",
     "lodash": "^4.17.21",
