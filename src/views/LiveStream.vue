@@ -33,7 +33,10 @@ onMounted(async () => {
         <div style="height: calc(100% - 48px); position: relative">
           <template v-for="{ id } in contestStore.contests" :key="id">
             <template v-if="checkScoreboard(id)">
-              <div :style="{ height: `${100 / contestStore.contests!.length}%` }">
+              <div
+                :style="{ height: `${100 / contestStore.contests!.length}%` }"
+                style="position: relative"
+              >
                 <ContestCountdown :contestId="id" />
                 <ScoreBoard :contestId="id" />
               </div>
