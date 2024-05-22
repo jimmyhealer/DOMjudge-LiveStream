@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, type UploadFile } from 'element-plus'
 
@@ -14,11 +14,6 @@ import logo from '@/assets/domjudge.png'
 
 const useContest = useContestStore()
 const setpActive = ref(0)
-const domjudgeForm = reactive({
-  url: '',
-  username: '',
-  password: ''
-})
 const tableData = ref<any[]>([])
 const selectContests = ref([])
 
@@ -70,8 +65,7 @@ async function handleUploadImage() {
 const router = useRouter()
 async function handleFinish() {
   useContest.setDomjudgeContests({
-    domjudge: domjudgeForm,
-    contests: selectContests.value,
+    contests: selectContests.value.map((item: any) => item.id),
     images: fileList.value
   })
 
@@ -79,7 +73,9 @@ async function handleFinish() {
 }
 
 onMounted(async () => {
-  const data = await ContestApi.getContests()
+  const data = await ContestApi.getContests({
+    onlyActive: true
+  })
   tableData.value = data.map((item: any) => ({
     startTime: dateToFormat(item.startTime),
     endTime: dateToFormat(item.endTime),

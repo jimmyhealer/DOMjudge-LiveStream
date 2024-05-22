@@ -8,16 +8,8 @@ defineProps<{
 }>()
 
 const selectContests = defineModel<any[]>('selectContests', { required: true })
-// TODO: rename
-const value1 = ref(2)
 
 const multipleTableRef = ref()
-
-function handleCurrentChange(val: any) {
-  if (!val) return
-  selectContests.value = [val.id]
-}
-
 function handleSelectionChange(val: any) {
   if (!val) return
 
@@ -28,62 +20,43 @@ function handleSelectionChange(val: any) {
   }
 
   selectContests.value = val
+  console.log(selectContests.value)
 }
 </script>
 
 <template>
   <el-space fill>
-    <el-radio-group v-model="value1">
-      <el-radio-button label="Select One" :value="1" />
-      <el-radio-button label="Select Two" :value="2" />
-    </el-radio-group>
-    <template v-if="value1 === 1">
-      <el-table
-        max-height="280"
-        width="580"
-        :data="tableData"
-        @current-change="handleCurrentChange"
-        highlight-current-row
+    <el-table
+      ref="multipleTableRef"
+      max-height="500"
+      width="580"
+      type="selection"
+      :data="tableData"
+      @selection-change="handleSelectionChange"
+    >
+      <el-table-column type="selection" />
+      <el-table-column prop="name" label="Name" />
+      <el-table-column prop="startTime" label="Start Time" />
+      <el-table-column prop="endTime" label="End Time" />
+    </el-table>
+    <div style="height: 130px">
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        content="You can drag the contest to change the order"
+        placement="right"
       >
-        <el-table-column prop="name" label="Name" />
-        <el-table-column prop="startTime" label="Start Time" />
-        <el-table-column prop="endTime" label="End Time" />
-      </el-table>
-    </template>
-    <template v-else>
-      <!-- TODO: check wheater select two contest -->
-      <el-table
-        ref="multipleTableRef"
-        max-height="280"
-        width="580"
-        type="selection"
-        :data="tableData"
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column type="selection" />
-        <el-table-column prop="name" label="Name" />
-        <el-table-column prop="startTime" label="Start Time" />
-        <el-table-column prop="endTime" label="End Time" />
-      </el-table>
-      <div style="height: 130px">
-        <el-tooltip
-          class="box-item"
-          effect="dark"
-          content="You can drag the contest to change the order"
-          placement="right"
-        >
-          <span>Contest Order:</span>
-        </el-tooltip>
-        <draggable :list="selectContests" itemKey="id" class="list-group">
-          <template #item="{ element, index }">
-            <div class="select-item">
-              <span class="order">{{ index + 1 }}.</span>
-              <span class="text">{{ element.name }}</span>
-            </div>
-          </template>
-        </draggable>
-      </div>
-    </template>
+        <span>Contest Order:</span>
+      </el-tooltip>
+      <draggable :list="selectContests" itemKey="id" class="list-group">
+        <template #item="{ element, index }">
+          <div class="select-item">
+            <span class="order">{{ index + 1 }}.</span>
+            <span class="text">{{ element.name }}</span>
+          </div>
+        </template>
+      </draggable>
+    </div>
     <el-alert type="info" show-icon :closable="true">
       <p>
         No contest found? Please make sure you have create the public contest <br />

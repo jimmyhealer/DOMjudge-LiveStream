@@ -15,13 +15,14 @@ const { checkScoreboard, checkLastSubmission, getContestDetail } = useLiveStream
 const contestStore = useContestStore()
 
 function getMaxContestTime() {
-  const result = contestStore.contests?.map((contest) => getContestDetail(contest.id).endTime) ?? []
+  const result = contestStore.contests?.map((contest) => getContestDetail(contest).endTime) ?? []
   return Math.max(...result.map((date) => date.getTime()))
 }
 
 const isInitialized = ref(false)
 onMounted(async () => {
-  await start(contestStore.contests?.map((contest) => contest.id ?? contest) || [])
+  await start(contestStore.contests!)
+
   isInitialized.value = true
 })
 </script>
@@ -31,7 +32,7 @@ onMounted(async () => {
     <el-row v-if="isInitialized">
       <el-col :span="20" style="height: 100vh">
         <div style="height: calc(100% - 48px); position: relative">
-          <template v-for="{ id } in contestStore.contests" :key="id">
+          <template v-for="id in contestStore.contests" :key="id">
             <template v-if="checkScoreboard(id)">
               <div
                 :style="{ height: `${100 / contestStore.contests!.length}%` }"
@@ -51,7 +52,7 @@ onMounted(async () => {
           :images="contestStore.images"
           style="margin-bottom: auto"
         />
-        <template v-for="{ id } in contestStore.contests" :key="id">
+        <template v-for="id in contestStore.contests" :key="id">
           <div
             class="last-submission-item"
             ref="el"
