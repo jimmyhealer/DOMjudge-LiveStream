@@ -18,6 +18,11 @@ const router = createRouter({
       path: '/live',
       name: 'LiveStream',
       component: () => import('@/views/LiveStream.vue')
+    },
+    {
+      path: '/marquee',
+      name: 'Marquee',
+      component: () => import('@/views/MarqueeEdit.vue')
     }
   ]
 })
