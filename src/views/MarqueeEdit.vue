@@ -57,5 +57,3 @@ onMounted(async () => {
     </el-main>
   </el-container>
 </template>
-
-<style scoped></style>
