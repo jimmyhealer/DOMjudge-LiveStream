@@ -39,6 +39,7 @@ export class ScoreboardFactory {
       contestDetail: {
         id: '',
         name: '',
+        shortName: '',
         startTime: new Date(),
         endTime: new Date(),
         frozenTime: new Date()
