@@ -108,3 +108,9 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Contact
 
 If you have any questions or need further assistance, you can issue a request in the repository. Or feel free to contact us at [yahing6066@gmail.com](mailto:yahing6066@gmail.com).
+
+## Acknowledgements
+
+- This project was inspired by and references logic and methods from [CCUPCxDS Live Tools](https://gitlab.com/kennhung/CCUPCxDS_live_tools).
+- Visual design elements were inspired by the [2024 ICPC World Final live stream](https://www.youtube.com/watch?v=an5sBhtktaE&t=6191s&ab_channel=ICPCLive).
+- Special thanks to Domjudge for their excellent platform and support.
