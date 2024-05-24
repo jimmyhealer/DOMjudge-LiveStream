@@ -13,7 +13,7 @@ const scoreboardData = useLiveStreamStore().getScoreboard(props.contestId) as Sc
 </script>
 
 <template>
-  <el-row>
+  <el-row style="background-color: #e5e5e5">
     <el-col :span="8">
       <el-row class="title border-bottom">
         <el-col :span="20" style="border-right: 1px solid #ccc">
