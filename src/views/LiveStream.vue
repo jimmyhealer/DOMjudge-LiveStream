@@ -32,10 +32,12 @@ onMounted(async () => {
     <el-row v-if="isInitialized">
       <el-col :span="20" style="height: 100vh">
         <div style="height: calc(100% - 48px); position: relative">
-          <template v-for="id in contestStore.contests" :key="id">
+          <template v-for="(id, idx) in contestStore.contests" :key="id">
             <template v-if="checkScoreboard(id)">
               <div
-                :style="{ height: `${100 / contestStore.contests!.length}%` }"
+                :style="{
+                  height: `calc(${100 / contestStore.contests!.length}% + ${idx ? '-48' : '+48'}px)`
+                }"
                 style="position: relative"
               >
                 <ContestCountdown :contestId="id" />
