@@ -36,7 +36,7 @@ onMounted(async () => {
             <template v-if="checkScoreboard(id)">
               <div
                 :style="{
-                  height: `calc(${100 / contestStore.contests!.length}% + ${idx ? '-64' : '+64'}px)`
+                  height: `calc(${100 / contestStore.contests!.length}% + ${idx ? '-96' : '+96'}px)`
                 }"
                 style="position: relative"
               >
