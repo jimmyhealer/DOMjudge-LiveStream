@@ -84,6 +84,8 @@ $title-height: 30px;
   border-radius: 50%;
   margin-left: 3px;
   background-color: red;
+
+  box-shadow: 0 0 0 2px #787878;
 }
 
 .border-bottom {
